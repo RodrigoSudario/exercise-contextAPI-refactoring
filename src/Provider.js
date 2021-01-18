@@ -1,17 +1,16 @@
-import React from 'react';
-import Cars from './Cars';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import MyContext from './MyContext';
-import './App.css';
 
-class App extends React.Component {
+class Provider extends Component {
   constructor(props) {
     super(props);
-    this.state={
+    this.state = {
       cars: {
         red: false,
         blue: false,
         yellow: false,
-      }
+      },
     }
     this.moveCar = this.moveCar.bind(this);
   }
@@ -23,20 +22,26 @@ class App extends React.Component {
         [car]: side,
       },
     });
-  }
-  
+  };
+
   render() {
-    const contextValue = {
+    const context = {
       ...this.state,
       moveCar: this.moveCar,
     };
-    return(
-      <MyContext.Provider value={ contextValue } >
-       <Cars />
-      </MyContext.Provider>
-    )
-    
-  }
-}
 
-export default App;
+    const { children } = this.props;
+
+    return (
+      <MyContext.Provider value={context}>
+        {children}
+      </MyContext.Provider>
+    );
+  }
+};
+
+Provider.propTypes = {
+  children: PropTypes.node.isRequired,
+};
+
+export default Provider;
